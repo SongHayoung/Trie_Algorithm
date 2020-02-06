@@ -1,70 +1,77 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-int N;
-long long answer = 0;
-
-void print(vector<vector<int>> board) {
-    for (int i = 0; i < N+1; i++) {
-        for (int j = 0; j < N+1; j++)
-            cout << board[i][j] << " ";
-        cout << endl;
-    }
-    cout << endl;
-}
-vector<vector<int>> rotate(vector<vector<int>> b) {
-    vector<vector<int>> ret(N+1, vector<int>(N+1));
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            ret[j][N - i - 1] = b[i][j];
+long long MAP[50][5];
+int main(void) {
+    int r1, c1, r2, c2;
+    cin >> r1 >> c1 >> r2 >> c2;
+    r1 += 5000;
+    r2 += 5000;
+    c1 += 5000;
+    c2 += 5000;
+    long long move = 1;
+    long long use_moved = move;
+    long long max = 0;
+    bool flag = true;
+    int x = 5000;
+    int y = 5000;
+    for(long long input = 1; input <= 10001*10001; input++){
+        if(r1<=y&&y<=r2 && c1<=x&&x<=c2) {
+            MAP[y - r1][x - c1] = input;
+            max = max < input ? input : max;
         }
-    }
-    return ret;
-}
-void DFS(int depth, vector < vector <int>> board) {
-    if (depth <= 5) {
-        for (int i = 0; i < N; i++)
-            for (int j = 0; j < N; j++)
-                answer = answer < board[i][j] ? board[i][j] : answer;
-        if(depth==5)
-            return;
-    }
-    vector<vector<int>> _board(N+1, vector<int>(N+1));
-    vector<vector<int>> _board2(N+1, vector<int>(N+1));
-    _board = board;
-    for (int i = 0; i < 4; i++) {
-        _board2 = _board;
-        for (int j = 0; j < N; j++) {
-            int zero_cnt = 0;
-            for (int k = 0; k < _board2[j].size(); k++) {
-                if (_board2[j][k] == 0) {
-                    _board2[j].erase(_board2[j].begin() + k);
-                    --k;   ++zero_cnt;
-                }
+        if(move%2==1){
+            if(flag){
+                ++x;
+                --use_moved;
             }
-            for (int k = 0; k < zero_cnt; k++)
-                _board2[j].push_back(0);
-            for (int k = 0; k < _board2[j].size()-1; k++) {
-                if (_board2[j][k] == _board2[j][k + 1]&&_board2[j][k]!=0) {
-                    _board2[j][k] *= 2;
-                    _board2[j].erase(_board2[j].begin() + k + 1);
-                    _board2[j].push_back(0);
-                }
+            else{
+                --y;
+                --use_moved;
             }
         }
-        DFS(depth + 1, _board2);
-        _board = rotate(_board);
+        else{
+            if(flag){
+                --x;
+                --use_moved;
+            }
+            else{
+                ++y;
+                --use_moved;
+            }
+        }
+        if(use_moved==0){
+            if(flag){
+                flag = false;
+                use_moved = move;
+            }
+            else{
+                ++move;
+                flag = true;
+                use_moved = move;
+            }
+        }
     }
-}
+    int cnt = 0;
+    while(max>=10){
+        max /= 10;
+        ++cnt;
+    }
+    for(int i=0;i<=r2-r1;i++){
+        for(int j=0;j<=c2-c1;j++){
+            int space = cnt;
+            int temp = MAP[i][j];
+            while(temp>=10){
+                --space;
+                temp /= 10;
+            }
+            for(int k=0;k<space;k++)
+                cout<<" ";
 
-int main(void)
-{
-    cin >> N;
-    vector<vector<int>> board(N+1, vector<int>(N+1));
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < N; j++)
-            cin >> board[i][j];
-
-    DFS(0, board);
-    cout << answer << endl;
+            cout<<MAP[i][j];
+            if(j!=c2-c1)
+                cout<<" ";
+        }
+        cout<<endl;
+    }
 }
