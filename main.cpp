@@ -1,12 +1,22 @@
 #include <iostream>
+#include <string>
+#include <algorithm>
 using namespace std;
-int main(void){
-    int N;
-    cin>>N;
-    int DP[N+1];
-    DP[0] = DP[1] = 1;
-    for(int i=2;i<=N;i++){
-        DP[i]=(DP[i-1]+DP[i-2])%10007;
+
+int solution(string s)
+{
+    for(int i=0;i<s.length();i++){
+        for(int start=0;start<=i;start++){
+            bool flag = true;
+            for(int k=0;k<(s.length()-i)/2;k++){
+                if(s[k+start]!=s[s.length()-1-i+start-k]){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag)
+                return s.length()-i;
+        }
     }
-    cout<<DP[N]<<endl;
+    return -1;
 }
