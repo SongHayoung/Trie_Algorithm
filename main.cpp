@@ -1,33 +1,24 @@
+#include <string>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 using namespace std;
-vector<int> weight;
-int N,M;
-int main(void){
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    int TC;
-    cin>>TC;
-    for(int i=1;i<=TC;i++){
-        int ans=-1;
-        cin>>N>>M;
-        weight.clear();
-        weight.resize(N);
-        for(int j=0;j<N;j++)
-            cin>>weight[j];
-        sort(weight.begin(),weight.end());
-        for(int j=N-1;j>=0;j--){
-            if(weight[j]>M)
-                continue;
-            for(int k=j-1;k>=0;k--){
-                if((weight[j]+weight[k])>M)
-                    continue;
-                ans=max(ans,weight[k]+weight[j]);
-                break;
-            }
+bool mysort(vector<int> v1, vector<int> v2){
+    if(v1[1]<v2[1])
+        return true;
+    if(v1[1]==v2[1])
+        return v1[0]<v2[0];
+    return false;
+}
+int solution(vector<vector<int>> routes) {
+    int answer = 1;
+    sort(routes.begin(),routes.end(),mysort);
+    int pos = routes[0][1];
+    for(int i=0;i<routes.size();i++){
+        if(pos<routes[i][0]) {
+            pos = routes[i][1];
+            answer++;
+
         }
-        cout<<"#"<<i<<" "<<ans<<endl;
     }
+    return answer;
 }
