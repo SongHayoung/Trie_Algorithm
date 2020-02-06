@@ -1,32 +1,41 @@
 #include <iostream>
+#include <memory.h>
 #include <vector>
 using namespace std;
-int main(void){
-    int M, N;
-    cin>>N>>M;
-    int require[M];
-    vector<int> rq(N);
-    for(int i=1;i<=N;i++)
-        rq[i-1]=i;
+int M, N;
+char MAP[50][50];
+char CMP[8][8] = {{'W','B','W','B','W','B','W','B'},
+                  {'B','W','B','W','B','W','B','W'},
+                  {'W','B','W','B','W','B','W','B'},
+                  {'B','W','B','W','B','W','B','W'},
+                  {'W','B','W','B','W','B','W','B'},
+                  {'B','W','B','W','B','W','B','W'},
+                  {'W','B','W','B','W','B','W','B'},
+                  {'B','W','B','W','B','W','B','W'}};
+int answer=987654321;
 
+void compare(int x,int y){
+    int cnt = 0;
+    for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 8; j++)
+            if (CMP[i][j] != MAP[y + i][x + j])
+                ++cnt;
+    if(cnt>=32)
+        cnt = 64-cnt;
+    answer = answer>cnt ? cnt : answer;
+    return ;
+}
+
+int main(void){
+    cin>>M>>N;
     for(int i=0;i<M;i++)
-        cin>>require[i];
-    int answer = 0;
-    for(int i=0;i<M;i++){
-        for(int j=0;j<rq.size();j++){
-            if(rq[j]==require[i]){
-                answer += j<rq.size()-j ? j:rq.size()-j;
-                vector<int> new_rq(N-i-1);
-                int idx = j+1;
-                for(int k=0;k<rq.size()-1;k++){
-                    if(idx==rq.size())
-                        idx=0;
-                    new_rq[k]=rq[idx++];
-                }
-                rq.assign(new_rq.begin(),new_rq.end());
-                break;
-            }
-        }
-    }
+        for(int j=0;j<N;j++)
+            cin>>MAP[i][j];
+
+    for(int i=0;i<=M-8;i++)
+        for(int j=0;j<=N-8;j++)
+            compare(j,i);
+
     cout<<answer<<endl;
+    return 0;
 }
