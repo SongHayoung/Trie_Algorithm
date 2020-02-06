@@ -1,24 +1,46 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-using namespace std;
-bool mysort(vector<int> v1, vector<int> v2){
-    if(v1[1]<v2[1])
-        return true;
-    if(v1[1]==v2[1])
-        return v1[0]<v2[0];
-    return false;
-}
-int solution(vector<vector<int>> routes) {
-    int answer = 1;
-    sort(routes.begin(),routes.end(),mysort);
-    int pos = routes[0][1];
-    for(int i=0;i<routes.size();i++){
-        if(pos<routes[i][0]) {
-            pos = routes[i][1];
-            answer++;
+#include <iostream>
 
+using namespace std;
+vector<long long> psum;
+vector<long long> need_total;
+void is_Possible(vector<int> budgets){
+    long long total = 0;
+    for(int i=0;i<budgets.size();i++){
+        total += budgets[i];
+        psum.push_back(total);
+        need_total.push_back(total+(budgets[i]*(budgets.size()-1-i)));
+    }
+}
+int solution(vector<int> budgets, int M) {
+    sort(budgets.begin(),budgets.end());
+    is_Possible(budgets);
+    if(psum.back()<=(long long)M){
+        return budgets.back();
+    }
+    if(need_total[0]>(long long)M){
+        long long min_Val = need_total[0];
+        for(int i=1;i<100000;i++){
+            min_Val -= budgets.size();
+            if(min_Val<=M)
+                return budgets[0]-i;
         }
     }
-    return answer;
+    int idx, left;
+    long long cur_total;
+    for(int i=0;i<need_total.size();i++){
+        if(need_total[i]>M){
+            idx = i-1;
+            left = need_total.size()-i;
+            cur_total = need_total[idx];
+            break;
+        }
+    }
+    for(int i=0;i<10000;i++){
+        cur_total += left;
+        if(cur_total>M)
+            return budgets[idx]+i;
+    }
 }
