@@ -1,72 +1,76 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stdio.h>
+#include <memory.h>
+#include <queue>
 using namespace std;
-class INFO{
-public:
-    string name;
-    int from;
-    int to;
-    INFO(string s, int f, int t) : from(f), to(t), name(s) {}
-};
-vector<INFO> info;
-vector<vector<string>> TICKET;
-vector<vector<string>> answer;
-bool mysort(vector<string> v1, vector<string> v2){
-    if(v1[0]<v2[0])
-        return true;
-    else if(v1[0]==v2[0])
-        return v1[1]<v2[1];
-    else
-        return false;
+int n;
+vector<vector<int>> Board;
+
+bool canFill(int row,int col){
+    for(int i=0;i<row;i++)
+        if(Board[i][col]!=0) return false;
+
+    return true;
 }
 
-void DFS(string from, int visit,int total, vector<bool> visited, vector<string> ans){
-    ans.push_back(from);
-    if(visit==total){
-        answer.push_back(ans);
-        return ;
-    }
-    int info_idx;
-    for(int i=0;i<info.size();i++){
-        if(info[i].name==from){
-            info_idx = i;
-            break;
+bool find(int row, int col, int h, int w){
+    int zero = 0;
+    int block = -1;
+    for(int i=row; i<row + h; i++){
+        for(int j=col; j<col+w;j++){
+            if(Board[i][j]==0){
+                if(!canFill(i,j)) return false;
+                if(++zero>2) return false;
+            }
+            else{
+                if(block!=-1&&Board[i][j]!=block) return false;
+                block = Board[i][j];
+            }
         }
     }
-
-    for(int to=info[info_idx].from;to<=info[info_idx].to;to++){
-        if(!visited[to]){
-            visited[to]=true;
-            DFS(TICKET[to][1],visit+1,total,visited,ans);
-            visited[to]=false;
+    for(int i=row; i<row+h;i++){
+        for(int j=col;j<col+w;j++){
+            Board[i][j]=0;
         }
     }
-
-    return ;
+    return true;
 }
 
-vector<string> solution(vector<vector<string>> tickets) {
-    sort(tickets.begin(),tickets.end(),mysort);
-    TICKET = tickets;
-    string name = tickets[0][0];
-    int from = 0;
-    int to = -1;
-    for(int i=0;i<tickets.size();i++) {
-        if (name != tickets[i][0]) {
-            INFO infomation(name,from,to);
-            info.push_back(infomation);
-            name = tickets[i][0];
-            from = i;
-            to = i-1;
+int solution(vector<vector<int>> board) {
+    Board=board;
+    n=board.size();
+    int answer = 0;
+    int cnt = 0;
+    do{
+        cnt = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(i<=n-3&&j<=n-2&&find(i,j,3,2)) cnt++;
+                else if(i<=n-2&&j<=n-3&&find(i,j,2,3)) cnt++;
+            }
         }
-        ++to;
-    }
-    INFO infomation(name,from,to);
-    info.push_back(infomation);
-    vector<bool> used(tickets.size(),false);
-    vector<string> ans;
-    DFS("ICN",0,tickets.size(),used,ans);
-    sort(answer.begin(),answer.end());
-    return answer[0];
+        answer+=cnt;
+    }while(cnt);
+
+    return answer;
+}
+int main(void){
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    vector<vector<int>> j = {{ 9, 9, 9,10,10,10,11,11,11,12},
+                             { 0, 0, 9,10, 0, 0,11, 0, 0,12},
+                             { 0, 0, 8, 0, 0, 0, 0, 0,12,12},
+                             { 7, 0, 8, 0, 0, 0, 0, 0, 0, 0},
+                             { 7, 8, 8, 0, 0, 0, 4, 0, 0, 0},
+                             { 7, 7, 0, 0, 0, 4, 4, 0, 0, 0},
+                             { 0, 6, 0, 0, 3, 0, 4, 0, 0, 0},
+                             { 6, 6, 6, 2, 3, 0, 0, 0, 5, 5},
+                             { 1, 2, 2, 2, 3, 3, 0, 0, 0, 5},
+                             { 1, 1, 1, 0, 0, 0, 0, 0, 0, 5}};
+
+    cout<<solution(j)<<endl;
 }
