@@ -1,46 +1,48 @@
-#include <string>
 #include <vector>
-#include <algorithm>
 #include <iostream>
-
+#include <queue>
 using namespace std;
-vector<long long> psum;
-vector<long long> need_total;
-void is_Possible(vector<int> budgets){
-    long long total = 0;
-    for(int i=0;i<budgets.size();i++){
-        total += budgets[i];
-        psum.push_back(total);
-        need_total.push_back(total+(budgets[i]*(budgets.size()-1-i)));
+void solution(){
+    int v,e,from,to,cur;
+    cin>>v>>e;
+    vector<vector<int>> Edges(v+1,vector<int>());
+    int groups[20001] = {0, };
+    for(int i=0;i<e;i++){
+        cin>>from>>to;
+        Edges[from].push_back(to);
+        Edges[to].push_back(from);
     }
+    queue<int> q;
+    for(int i=1;i<=v;i++){
+        if(groups[i]!=0)
+            continue;
+        q.push(i);
+        groups[i]=1;
+        while(!q.empty()){
+            cur = q.front();
+            q.pop();
+            for(int j=0;j<Edges[cur].size();j++){
+                if(groups[Edges[cur][j]]==0){
+                    groups[Edges[cur][j]] = groups[cur] == 1?2:1;
+                    q.push(Edges[cur][j]);
+                }
+                else if(groups[Edges[cur][j]]==groups[cur]){
+                    cout<<"NO"<<endl;
+                    return ;
+                }
+            }
+        }
+    }
+    cout<<"YES"<<endl;
 }
-int solution(vector<int> budgets, int M) {
-    sort(budgets.begin(),budgets.end());
-    is_Possible(budgets);
-    if(psum.back()<=(long long)M){
-        return budgets.back();
-    }
-    if(need_total[0]>(long long)M){
-        long long min_Val = need_total[0];
-        for(int i=1;i<100000;i++){
-            min_Val -= budgets.size();
-            if(min_Val<=M)
-                return budgets[0]-i;
-        }
-    }
-    int idx, left;
-    long long cur_total;
-    for(int i=0;i<need_total.size();i++){
-        if(need_total[i]>M){
-            idx = i-1;
-            left = need_total.size()-i;
-            cur_total = need_total[idx];
-            break;
-        }
-    }
-    for(int i=0;i<10000;i++){
-        cur_total += left;
-        if(cur_total>M)
-            return budgets[idx]+i;
+
+int main(void){
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int TC;
+    cin>>TC;
+    for(int i=0;i<TC;i++){
+        solution();
     }
 }
