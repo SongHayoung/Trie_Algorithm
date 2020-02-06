@@ -7,10 +7,10 @@
 #IncludeRegexTransform: 
 
 /Users/summerflower/CLionProjects/algorithm/main.cpp
+stdio.h
+-
+algorithm
+-
 vector
--
-iostream
--
-queue
 -
 
