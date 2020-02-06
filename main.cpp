@@ -1,23 +1,19 @@
 #include <string>
 #include <vector>
-#include <iostream>
+#include <algorithm>
 using namespace std;
 
-int solution(vector<int> citations) {
-    vector<int> inyoung(10001,0);
-    int max_inyoung = 0;
-    int total_inyoung = 0;
-    for(int i=0;i<citations.size();i++){
-        inyoung[citations[i]]+=1;
-        max_inyoung = max_inyoung < citations[i] ? citations[i]:max_inyoung;
-        total_inyoung += 1;
+bool solution(vector<string> phone_book) {
+    sort(phone_book.begin(),phone_book.end());
+    for(int i=0;i<phone_book.size()-1;i++){
+        if(phone_book[i].length()>phone_book[i+1].length())
+            continue;
+        for(int j=0;j<phone_book[i].length();j++){
+            if(phone_book[i][j]!=phone_book[i+1][j])
+                break;
+            if(j==phone_book[i].length()-1)
+                return false;
+        }
     }
-    int answer = 0;
-    int cur_inyoung = total_inyoung;
-    for(int i=0;i<=max_inyoung;i++){
-        if(cur_inyoung>=i&&total_inyoung-cur_inyoung<=i)
-            answer = i;
-        cur_inyoung -= inyoung[i];
-    }
-    return answer;
+    return true;
 }
