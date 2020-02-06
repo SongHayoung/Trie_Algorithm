@@ -1,41 +1,33 @@
-#include <string>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 using namespace std;
-bool mysort(vector<int> v1, vector<int> v2){
-    if(v1[0]<v2[0])
-        return true;
-    else if(v1[0]==v2[0]){
-        if(v1[1]<v2[1])
-            return true;
-    }
-    return false;
-}
-int solution(vector<vector<int>> jobs) {
-    sort(jobs.begin(),jobs.end(),mysort);
-    int answer = 0;
-    int size = jobs.size();
-    int start_time=0;
-    while(jobs.size()!=0){
-        int choose = 987654321;
-        int during_time = 987654321;
-        for(int i=0;i<jobs.size();i++){
-            if(jobs[i][0]>start_time)
+vector<int> weight;
+int N,M;
+int main(void){
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int TC;
+    cin>>TC;
+    for(int i=1;i<=TC;i++){
+        int ans=-1;
+        cin>>N>>M;
+        weight.clear();
+        weight.resize(N);
+        for(int j=0;j<N;j++)
+            cin>>weight[j];
+        sort(weight.begin(),weight.end());
+        for(int j=N-1;j>=0;j--){
+            if(weight[j]>M)
+                continue;
+            for(int k=j-1;k>=0;k--){
+                if((weight[j]+weight[k])>M)
+                    continue;
+                ans=max(ans,weight[k]+weight[j]);
                 break;
-            if(during_time>jobs[i][1]){
-                choose = i;
-                during_time = jobs[i][1];
             }
         }
-        if(choose<500){
-            answer += jobs[choose][1]+start_time-jobs[choose][0];
-            start_time += jobs[choose][1];
-            jobs.erase(jobs.begin()+choose);
-        }
-        else{
-            ++start_time;
-        }
+        cout<<"#"<<i<<" "<<ans<<endl;
     }
-    return answer/size;
 }
