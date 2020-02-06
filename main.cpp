@@ -1,22 +1,13 @@
-#include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
+#include <iostream>
 using namespace std;
-
-int solution(string s)
-{
-    for(int i=0;i<s.length();i++){
-        for(int start=0;start<=i;start++){
-            bool flag = true;
-            for(int k=0;k<(s.length()-i)/2;k++){
-                if(s[k+start]!=s[s.length()-1-i+start-k]){
-                    flag = false;
-                    break;
-                }
-            }
-            if(flag)
-                return s.length()-i;
-        }
+int solution(vector<int> weight) {
+    sort(weight.begin(),weight.end());
+    int answer = 0;
+    for(int i=0;i<weight.size();i++){
+        if(answer+1<weight[i])  break;
+        else answer+=weight[i];
     }
-    return -1;
 }
