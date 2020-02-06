@@ -1,31 +1,25 @@
-#include<iostream>
-
+#include <iostream>
 using namespace std;
-void solution(int n) {
-    bool flag = false;
-    int N = n;
-    do {
-        if (N % 10 == 3 || N % 10 == 6 || N % 10 == 9) {
-            cout << "-";
-            flag = true;
-        }
-        N /= 10;
-    } while (N);
-    if (!flag) {
-        cout << n;
-        return;
-    }
-}
-int main(int argc, char** argv)
+int main(void)
 {
-    int test_case;
-    int T;
-    cin>>T;
-    for(test_case = 1; test_case < T; ++test_case)
-    {
-        solution(test_case);
-        cout << " ";
+    int tc;
+    cin >> tc;
+    int t2, m2;
+    int at, am;
+    bool flag;
+    for (int i = 1; i <= tc; i++) {
+        cin >> at >> am >> t2 >> m2;
+        flag = false;
+        am += m2;
+        if (am >= 60) {
+            flag = true;
+            am -= 60;
+        }
+        at += t2;
+        if (flag)
+            ++at;
+        if (at >= 13)
+            at -= 12;
+        cout << "#" << i << " " << at << " " << am << endl;
     }
-    solution(T);
-    return 0;
 }
