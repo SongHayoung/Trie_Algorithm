@@ -1,52 +1,30 @@
 #include <iostream>
+#include <memory.h>
 #include <algorithm>
-#include <queue>
 using namespace std;
+int N;
+int cards[1001];
+int DP[1001];
 
-int N, M;
-
-int print(){
-    int arr[10]={0, };
-    queue<pair<string,int>> q;
-    int doc;
-    for(int i=0;i<N;i++){
-        cin>>doc;
-        arr[doc] += 1;
-        if(i==M)
-            q.push(make_pair("this",doc));
-        else
-            q.push(make_pair("",doc));
+int func(int n){
+    int &ret = DP[n];
+    if(ret!=-1)
+        return ret;
+    ret = cards[n];
+    for(int i=1;i<=n/2;i++){
+        ret = max(ret,func(i)+func(n-i));
     }
-    int cnt = 1;
-    bool flag;
-    while(1){
-        int priority = q.front().second;
-        string s = q.front().first;
-        q.pop();
-        flag = true;
-        for(int i=priority+1;i<=9;i++){
-            if(arr[i]!=0){
-                flag = false;
-                break;
-            }
-        }
-        if(!flag){
-            q.push(make_pair(s,priority));
-        }
-        else{
-            if(s=="this")
-                break;
-            cnt++;
-            arr[priority] -= 1;
-        }
-    }
-    return cnt;
+    return ret;
 }
+
 int main(void){
-    int test_case;
-    cin>>test_case;
-    for(int i=0;i<test_case;i++){
-        cin>>N>>M;
-        cout<<print()<<endl;
-    }
+    int N;
+    cin>>N;
+    for(int i=1;i<=N;i++)
+        cin>>cards[i];
+    memset(DP,-1,sizeof(DP));
+    DP[0] = cards[0] = 0;
+    DP[1] = cards[1];
+    func(N);
+    cout<<DP[N]<<endl;
 }
