@@ -1,61 +1,102 @@
-#include <vector>
+#include <iostream>
 using namespace std;
-int NUM[20],tot = 0,T, size;
-vector<int> DP(1048576,-1);
-int dp(int idx,int bit_mask){
-    if(idx==size)
+int D,W,K;
+int film[13][20];
+int mode[13];
+inline bool check(){
+    int cnt;
+    for(int i=0;i<W;i++){
+        cnt = 1;
+        for(int j=1;j<D;j++){
+            if(mode[j]!=-1&&mode[j-1]!=-1){
+                if(mode[j]==mode[j-1])
+                    ++cnt;
+                else if(j>=D-K+1)
+                    return false;
+                else
+                    cnt = 1;
+            }
+            else if(mode[j]!=-1){
+                if(mode[j]==film[j-1][i])
+                    ++cnt;
+                else if(j>=D-K+1)
+                    return false;
+                else
+                    cnt = 1;
+            }
+            else if(mode[j-1]!=-1){
+                if(film[j][i]==mode[j-1])
+                    ++cnt;
+                else if(j>=D-K+1)
+                    return false;
+                else
+                    cnt = 1;
+            }
+            else{
+                if(film[j][i]==film[j-1][i])
+                    ++cnt;
+                else if(j>=D-K+1)
+                    return false;
+                else
+                    cnt = 1;
+            }
+            if(cnt==K)
+                break;
+
+        }
+        if(cnt!=K)
+            return false;
+    }
+    return true;
+}
+bool choose(int choosed,int idx){
+    if(choosed==0)
+        return check();
+
+    if(idx>=D||D-idx<choosed)
+        return false;
+
+    mode[idx] = 0;
+    if(choose(choosed-1,idx+1))
+        return true;
+
+    mode[idx] = 1;
+    if(choose(choosed-1,idx+1))
+        return true;
+
+    mode[idx] = -1;
+    if(choose(choosed,idx+1))
+        return true;
+
+    return false;
+}
+
+inline int solution(){
+    cin>>D>>W>>K;
+    for(int i=0;i<D;i++)
+        for(int j=0;j<W;j++)
+            cin>>film[i][j];
+    if(K==1)
         return 0;
-    if(DP[bit_mask]!=-1)
-        return DP[bit_mask];
-    if(bit_mask&1<<idx){
-        DP[bit_mask] = dp(idx+1,bit_mask^1<<idx) - 2*NUM[idx];
-        return DP[bit_mask];
+    for(int i=0;i<D;i++)
+        mode[i] = -1;
+    for(int i=0;i<=K;i++){
+        if(choose(i,0))
+            return i;
     }
-    return dp(idx+1,bit_mask);
+    return K;
 }
 
-int DFS(int idx,int bit_mask){
-    if(idx==size){
-        if(T == tot + dp(0,bit_mask))
-            return 1;
-        return 0;
+int main(int argc, char** argv)
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int test_case;
+    int T;
+    cin>>T;
+    for(int test_case=1;test_case<=T;test_case++){
+        cout<<"#"<<test_case<<" "<<solution()<<endl;
     }
-    return DFS(idx+1,bit_mask)+DFS(idx+1,bit_mask|1<<idx);
+    return 0;//정상종료시 반드시 0을 리턴해야합니다.
 }
-
-int solution(vector<int> numbers, int target) {
-    T = target; size = numbers.size();
-    for(int i=0;i<numbers.size();i++)
-        tot += NUM[i] = numbers[i];
-    return DFS(0,0);
-}
-
-/*
- * 포인터 처리
-#include <vector>
-using namespace std;
-vector<int> *NUM;
-int *Target;
-int answer;
-void DFS(int sum,int n) {
-    if(n >= NUM->size()){
-        if(sum == *Target) answer++;
-        return;
-    }
-
-    DFS(sum , n+1);
-    DFS(sum - NUM->at(n)*2, n+1);
-}
-
-int solution(vector<int> numbers, int target) {
-    int total = 0;
-    for(int i=0;i<numbers.size();i++)
-        total += numbers[i];
-    NUM = &numbers;
-    Target = &target;
-    DFS(total , 1);
-    DFS(total-2*numbers[0], 1);
-
-    return answer;
-}
- */
