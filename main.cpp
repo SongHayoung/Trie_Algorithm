@@ -1,15 +1,24 @@
 #include <vector>
 using namespace std;
 int NUM[20];
+vector<int> DP(1048576,-1);
 int tot = 0;
 int T, size;
+int dp(int idx,int bit_mask){
+    if(idx==size)
+        return 0;
+    if(bit_mask&1<<idx){
+        if(DP[bit_mask]!=-1)
+            return DP[bit_mask];
+        DP[bit_mask] = dp(idx+1,bit_mask^1<<idx) - 2*NUM[idx];
+        return DP[bit_mask];
+    }
+    else
+        return dp(idx+1,bit_mask);
+}
 int DFS(int idx,int bit_mask){
     if(idx==size){
-        int ans = tot;
-        for(int i=0;i<idx;i++)
-            if(bit_mask&1<<i)
-                ans -= 2*NUM[i];
-        if(T == ans)
+        if(T == tot + dp(0,bit_mask))
             return 1;
         return 0;
     }
