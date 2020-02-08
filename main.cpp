@@ -13,9 +13,9 @@ void calc(int d,int &s,vector<bool> &Primes){
     }
     for(int i=0;i<=9;i++){
         if(number[i]!=0){
-            --number[i];    s *=10 + i;
+            --number[i];    s = s * 10 + i;
             calc(d + 1, s, Primes);
-            s /= 10;    ++number[i];
+            ++number[i];    s /= 10;
         }
     }
 }
