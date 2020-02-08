@@ -7,8 +7,12 @@
 #IncludeRegexTransform: 
 
 /Users/summerflower/CLionProjects/algorithm/main.cpp
-iostream
+string
 -
 vector
+-
+math.h
+-
+iostream
 -
 
