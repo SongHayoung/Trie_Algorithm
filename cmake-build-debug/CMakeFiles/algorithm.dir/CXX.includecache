@@ -7,11 +7,9 @@
 #IncludeRegexTransform: 
 
 /Users/summerflower/CLionProjects/algorithm/main.cpp
-string
--
 vector
 -
-math.h
+algorithm
 -
 iostream
 -
