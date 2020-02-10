@@ -7,8 +7,6 @@
 #IncludeRegexTransform: 
 
 /Users/summerflower/CLionProjects/algorithm/main.cpp
-iostream
--
-memory.h
+stdio.h
 -
 
