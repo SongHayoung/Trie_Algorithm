@@ -1,12 +1,22 @@
-#include <stdio.h>
-int main(int argc, char** argv)
-{
-    int test_case, T;
-    long long n;
-    scanf("%d",&T);
-    for(test_case = 1; test_case <= T; ++test_case){
-        scanf("%ld",&n);
-        printf("#%d %ld %ld\n",test_case,(n-1)*(n-1)<<1^1,(n*n<<1)-1);
+#include <string>
+#include <vector>
+#include <queue>
+using namespace std;
+
+int solution(int stock, vector<int> dates, vector<int> supplies, int k) {
+    priority_queue<int,vector<int>,less<int>> pq;
+    int idx = 0;
+    int answer = 0;
+    for(int i=0;i<k;i++){
+        if(stock==0){
+            for(;dates[idx]<=i;idx++)
+                pq.push(supplies[idx]);
+
+            stock += pq.top();
+            pq.pop();
+            ++answer;
+        }
+        --stock;
     }
-    return 0;
+    return answer;
 }
