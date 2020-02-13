@@ -9,6 +9,8 @@
 /Users/summerflower/CLionProjects/algorithm/main.cpp
 iostream
 -
+stdio.h
+-
 memory.h
 -
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <memory.h>
 
 using namespace std;
@@ -13,11 +14,12 @@ using namespace std;
 #define TYPE int
 const int UnsortedArray[MAXSIZE] = {9, 3, 5, 2, 1, 7, 6, 8, 10, 4};
 
-inline void PrintArray(int *Array,int &swaped){
-    for(int index = 0; index < MAXSIZE; index++){
-        cout<<*(Array + index)<<" ";
-    }
-    cout<<"\nSwap Count : "<<swaped<<endl<<endl;
+inline void PrintArray(int *Array,int &swaped, string s){
+    printf("%s",&s);
+    for(int index = 0; index < MAXSIZE; index++)
+        printf("%d ",*(Array + index));
+
+    printf("\nSwap Count : %d\n\n",swaped);
 }
 
 
@@ -25,7 +27,6 @@ void BubbleSort_Simulation(){
     int BubblesortedArray[MAXSIZE];
     int cntOfswap = 0;
     memcpy(BubblesortedArray,UnsortedArray,sizeof(BubblesortedArray));
-    cout<<"BUBBLE SORT\n";
     for(int repeat = 0; repeat < MAXSIZE; repeat++){
         for(int start = 0; start < MAXSIZE-repeat-1; start++){
             if(BubblesortedArray[start] > BubblesortedArray[start+1]) {
@@ -35,14 +36,13 @@ void BubbleSort_Simulation(){
         }
     }
 
-    PrintArray(BubblesortedArray, cntOfswap);
+    PrintArray(BubblesortedArray, cntOfswap, "BUBBLE SORT\n");
 }
 
 void SelectionSort_Simulation(){
     int SelectionsortedArray[MAXSIZE];
     int cntOfswap = 0;
     memcpy(SelectionsortedArray,UnsortedArray,sizeof(SelectionsortedArray));
-    cout<<"SELECTION SORT\n";
     for(int start = 0; start < MAXSIZE-1; start++){
         int min_element_index = start;
         for(int find = start+1; find < MAXSIZE; find++){
@@ -56,14 +56,13 @@ void SelectionSort_Simulation(){
         }
     }
 
-    PrintArray(SelectionsortedArray,cntOfswap);
+    PrintArray(SelectionsortedArray,cntOfswap,"SELECTION SORT\n");
 }
 
 void InsertionSort_Simulation(){
     int InsertionsortedArray[MAXSIZE];
     int cntOfswap = 0;
     memcpy(InsertionsortedArray,UnsortedArray,sizeof(InsertionsortedArray));
-    cout<<"INSERTION SORT\n";
     for(int start = 1; start < MAXSIZE; start++){
         for(int compare = start-1; compare >= 0; compare--){
             if(InsertionsortedArray[compare] > InsertionsortedArray[compare+1]){
@@ -74,7 +73,7 @@ void InsertionSort_Simulation(){
         }
     }
 
-    PrintArray(InsertionsortedArray,cntOfswap);
+    PrintArray(InsertionsortedArray,cntOfswap,"INSERTION SORT\n");
 }
 
 inline void Merge(int *Array, int left, int mid, int right, int &cntOfswap){
@@ -116,16 +115,14 @@ void MergeSort_Simulation(){
     int MergesortedArray[MAXSIZE];
     int cntOfswap = 0;
     memcpy(MergesortedArray,UnsortedArray,sizeof(MergesortedArray));
-    cout<<"MERGE SORT\n";
     MergeSort(MergesortedArray, 0, MAXSIZE-1,cntOfswap);
-    PrintArray(MergesortedArray,cntOfswap);
+    PrintArray(MergesortedArray,cntOfswap,"MERGE SORT\n");
 }
 
 void GnomeSort_Simulation(){
     int GnomesortedArray[MAXSIZE];
     int cntOfswap = 0;
     memcpy(GnomesortedArray,UnsortedArray,sizeof(GnomesortedArray));
-    cout<<"GNOME SORT\n";
     int Index = 0;
     while(Index != (MAXSIZE-1)){
         if(GnomesortedArray[Index]>GnomesortedArray[Index+1]){
@@ -137,7 +134,7 @@ void GnomeSort_Simulation(){
         } else
             ++Index;
     }
-    PrintArray(GnomesortedArray,cntOfswap);
+    PrintArray(GnomesortedArray,cntOfswap,"GNOME SORT\n");
 }
 
 inline void CellSort(int *Array, int &_start, int &Gap, int &cntOfswap){
@@ -156,7 +153,6 @@ void CellSort_Simulation(){
     int CellsortedArray[MAXSIZE];
     int cntOfswap = 0;
     memcpy(CellsortedArray,UnsortedArray,sizeof(CellsortedArray));
-    cout<<"CELL SORT\n";
     int Gap = MAXSIZE>>1;
     while(Gap){
         if(!(Gap&1))
@@ -166,7 +162,7 @@ void CellSort_Simulation(){
 
         Gap>>=1;
     }
-    PrintArray(CellsortedArray,cntOfswap);
+    PrintArray(CellsortedArray,cntOfswap,"CELL SORT\n");
 }
 inline void Partition(int *Array, int &left, int &right, int &high, int &cntOfswap){
     int low = left;
@@ -201,9 +197,8 @@ void QuickSort_Simulation(){
     int QuicksortedArray[MAXSIZE];
     int cntOfswap = 0;
     memcpy(QuicksortedArray,UnsortedArray,sizeof(QuicksortedArray));
-    cout<<"QUICK SORT\n";
     QuickSort(QuicksortedArray,0,MAXSIZE-1,cntOfswap);
-    PrintArray(QuicksortedArray,cntOfswap);
+    PrintArray(QuicksortedArray,cntOfswap,"QUICK SORT\n");
 }
 int main(int argc, char** argv){
     BubbleSort_Simulation();
