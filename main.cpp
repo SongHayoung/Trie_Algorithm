@@ -5,9 +5,6 @@
 #define INPUTS 20
 #define LETTERS 20
 
-inline int get_Index(char c);
-inline bool is_Alpha(char c);
-
 struct Trie{
     Trie *next[Alpha_N_Nums];
     bool is_Finish;
@@ -44,26 +41,26 @@ struct Trie{
         }
         return true;
     }
+
+    int get_Index(char c){
+        if('A'<=c&&c<='Z')
+            return c-'A';
+        else if('a'<=c&&c<='z')
+            return 26 + c - 'a';
+        else
+            return 52 + c - '0';
+    }
+
+    bool is_Alpha(char c){
+        return ('a'<=c&&c<='z')||('A'<=c&&c<='Z')||('0'<=c&&c<='9');
+    }
 };
-
-inline int get_Index(char c){
-    if('A'<=c&&c<='Z')
-        return c-'A';
-    else if('a'<=c&&c<='z')
-        return 26 + c - 'a';
-    else
-        return 52 + c - '0';
-}
-
-inline bool is_Alpha(char c){
-    return ('a'<=c&&c<='z')||('A'<=c&&c<='Z')||('0'<=c&&c<='9');
-}
 
 int main(int argc, char** argv){
     char input[INPUTS][26] = {"eevee", "vaporeon", "jolteon", "flareon", "espeon", "umbreon", "leafeon", "glaceon", "sylveon", "pikachu",
                           "Charizard", "Butterfree", "Dragonite", "Mewtwo", "Mew", "Persian", "001Bulbasaur", "002bulbasaur", "Venusaur003", "5011"};
 
-    char prefixes[LETTERS][26] = {"pika", "leaf", "monster", "eve", "espn", "umbrella", "flame", "grace", "sylveon", "poket",
+    char letter[LETTERS][26] = {"pika", "leaf", "monster", "eve", "espn", "umbrella", "flame", "grace", "sylveon", "poket",
                              "Butter", "001B", "Venusaur003", "50", "Mew", "p", "003", "Vinus", "Hayoung", "KOREA"};
     Trie *root = new Trie();
     for(int i=0;i<INPUTS;i++){
@@ -72,13 +69,13 @@ int main(int argc, char** argv){
     }
     printf("\n\n\n");
     for(int i=0;i<LETTERS;i++){
-        root->is_Prefix(prefixes[i]) ?
-        printf("Is Prefix %s ? : YES\n",prefixes[i]) : printf("IS Prefix %s ? : NO\n",prefixes[i]);
+        root->is_Prefix(letter[i]) ?
+        printf("Is Prefix %s ? : YES\n",letter[i]) : printf("IS Prefix %s ? : NO\n",letter[i]);
     }
     printf("\n\n\n");
     for(int i=0;i<LETTERS;i++){
-        root->is_Exsist(prefixes[i]) ?
-        printf("Is Exsist %s ? : YES\n",prefixes[i]) : printf("IS Exsist %s ? : NO\n",prefixes[i]);
+        root->is_Exsist(letter[i]) ?
+        printf("Is Exsist %s ? : YES\n",letter[i]) : printf("IS Exsist %s ? : NO\n",letter[i]);
     }
     delete root;
     return 0;//정상종료시 반드시 0을 리턴해야합니다.
